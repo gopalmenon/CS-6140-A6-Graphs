@@ -1,0 +1,86 @@
+\documentclass[11pt]{article}
+
+\usepackage{classDM17}
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\title{Asmt 6: Graphs}
+\author{Gopal Menon\\Turn in through Canvas by 5pm: \\
+Monday, May 1}
+\date{}
+
+\begin{document}
+\maketitle
+
+
+%
+\section{Finding $q*$ (50 points)}
+\paragraph{A: (10 points):} 
+Run each method (with $t = 1024$, $q_0 = [1, 0, 0, . . ., 0]^T$ and $t_0 = 100$ when needed) and report the answers.
+
+    \begin{table}[!h] 
+    \centering
+    \label{6A}
+    \begin{tabular}{|c|c|c|c|}
+      \hline
+    Matrix Power & State Propagation & Random Walk & Eigen Analysis  \\
+      \hline        
+      
+$\begin{bmatrix}
+   0.035758\\
+   0.057212\\
+   0.058092\\
+   0.079217\\
+   0.085818\\
+   0.066014\\
+   0.157905\\
+   0.171636\\
+   0.137309\\
+   0.151040\\
+         \end{bmatrix}$
+  &
+  $\begin{bmatrix}
+     0.035758\\
+   0.057212\\
+   0.058092\\
+   0.079217\\
+   0.085818\\
+   0.066014\\
+   0.157905\\
+   0.171636\\
+   0.137309\\
+   0.151040\\
+    \end{bmatrix}$
+  &
+  $\begin{bmatrix}
+     0.00000\\
+   0.50000\\
+   0.50000\\
+   0.00000\\
+   0.00000\\
+   0.00000\\
+   0.00000\\
+   0.00000\\
+   0.00000\\
+   0.00000\\
+     \end{bmatrix}$
+ &	 
+  $\begin{bmatrix}
+   0.035758\\
+   0.057212\\
+   0.058092\\
+   0.079217\\
+   0.085818\\
+   0.066014\\
+   0.157905\\
+   0.171636\\
+   0.137309\\
+   0.151040\\
+     \end{bmatrix}$\\
+      \hline
+    \end{tabular}
+\end{table}
+
+\end{document}
+
