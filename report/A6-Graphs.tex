@@ -16,12 +16,13 @@ Monday, May 1}
 
 %
 \section{Finding $q*$ (50 points)}
-\paragraph{A: (10 points):} 
-Run each method (with $t = 1024$, $q_0 = [1, 0, 0, . . ., 0]^T$ and $t_0 = 100$ when needed) and report the answers.
+\paragraph{A: (20 points):} 
+Run each method (with $t = 1024$, $q_0 = [1, 0, 0, \ldots, 0]^T$ and $t_0 = 100$ when needed) and report the answers.
 
     \begin{table}[!h] 
     \centering
     \label{6A}
+    \caption{Value of vector}
     \begin{tabular}{|c|c|c|c|}
       \hline
     Matrix Power & State Propagation & Random Walk & Eigen Analysis  \\
@@ -81,6 +82,203 @@ $\begin{bmatrix}
       \hline
     \end{tabular}
 \end{table}
+
+\paragraph{B: (10 points):} 
+
+Rerun the \textit{Matrix Power} and \textit{State Propagation} techniques with $q_0 =[0.1,0.1,\ldots,0.1]^T$.For what value of $t$ is required to get as close to the true answer as the older initial state?
+
+
+    \begin{table}[!h] 
+    \centering
+    \label{6Bx}
+    \caption{Matrix Power and State Propagation}
+    \begin{tabular}{|c|c|c|c|}
+      \hline
+    $t=64$ & $t=128$ & $t=256$ & $t=512$  \\
+      \hline        
+      
+$\begin{bmatrix}
+   0.035711\\
+   0.057177\\
+   0.058120\\
+   0.079316\\
+   0.085925\\
+   0.066098\\
+   0.158001\\
+   0.171422\\
+   0.137112\\
+   0.151117\\
+         \end{bmatrix}$
+  &
+  $\begin{bmatrix}
+   0.035756\\
+   0.057215\\
+   0.058091\\
+   0.079218\\
+   0.085819\\
+   0.066013\\
+   0.157925\\
+   0.171612\\
+   0.137289\\
+   0.151062\\
+    \end{bmatrix}$
+  &
+  $\begin{bmatrix}
+   0.035757\\
+   0.057212\\
+   0.058092\\
+   0.079217\\
+   0.085818\\
+   0.066014\\
+   0.157906\\
+   0.171636\\
+   0.137308\\
+   0.151040\\
+     \end{bmatrix}$
+ &	 
+  $\begin{bmatrix}
+   0.035758\\
+   0.057212\\
+   0.058092\\
+   0.079217\\
+   0.085818\\
+   0.066014\\
+   0.157905\\
+   0.171636\\
+   0.137309\\
+   0.151040\\
+     \end{bmatrix}$\\
+      \hline
+    \end{tabular}
+\end{table}
+
+With $t=512$, the value of $q*$ is equal to the value obtained with the older initial state $q_0$ for both Matrix Power and State Propagation. This is expected since raising the matrix to a power is equivalent to multiplying the matrix the same number of times.
+
+\paragraph{C: (12 points):} 
+Explain at least one \textbf{Pro} and one \textbf{Con} of each approach. The \textbf{Pro} should explain a situation when it is the best option to use. The \textbf{Con} should explain why another approach may be better for some situation.\\
+
+The Matrix Power and State Propagation approaches are essentially the same. The reason is that $q* = M^tQ_0$ and $q_{i+1} = M \times q_i$ done $t$ times are equivalent since the latter method results in $M$ being raised to the power $t$.\\
+
+I did not understand how the Random Walk method is supposed to work. So I'm leaving this method out from the pros and cons analysis.\\
+
+The Eigen Analysis method will give us the exact answer. The reason is that once we get $q*$, if we multiply the transition matrix again by $q*$, we should get $q*$ again. 
+
+
+\begin{equation*}
+\begin{aligned}
+M \times q* &=  q*\\
+&= \lambda  \frac{q*}{\norm{q*}_1}
+\end{aligned}
+\end{equation*}
+
+where $\lambda$ is some constant that keeps the equality relation true. This means that $q*$ is the principal left eigen vector of $M$.\\
+
+Even though the Eigen Analysis method will give us the exact answer, it may not always be possible to use it in the case of a graph for the world wide web since the matrix size will be very large.\\
+
+The State Propagation approaches will work for large graphs as we only need to do many matrix multiplications of the transition matrix with the initial state vector. In the case of the world wide web, $50$ to $75$ multiplications reportedly reach a steady steady state.\\
+
+The Matrix Power can be very compute intensive for large matrices.
+
+\paragraph{C: (12 points):} 
+
+Is the Markov chain \textit{ergodic}? Explain why or why not.\\
+
+The Markov chain seems to be ergodic as the state probability vector is converging for values of $t$ shown in table 2 above. If the Markov chain had not been ergodic $M* \neq M^n$ as $n \rightarrow \infty$. \\
+
+Since the final state vector does not have a zero in any position, it means that there is a probability that a random walker on the graph can end up at any state. This means that the Markov chain is ergodic.
+
+\paragraph{D: (8 points):} 
+Each matrix row and column represents a node of the graph, label these from $1$ to $10$ starting from the top and from the left. What nodes can be reached from node $4$ in one step, and with what probabilities?
+
+
+    \begin{table}[!h] 
+    \centering
+    \label{6E}
+    \caption{Nodes that can be reached from node $4$ in one step}
+    \begin{tabular}{|c|c|c|c|}
+      \hline
+    Node & Probability \\
+      \hline        
+    $3$ & 0.3\\
+      \hline
+    $5$ & 0.3\\
+      \hline
+    $6$ & 0.4\\
+      \hline
+    \end{tabular}
+\end{table}
+
+\section{BONUS: Taxation (5 points)}
+Repeat the trials in part \textbf{1.A} above using taxation $\beta = 0.85$ so at each step, with probability $1 - \beta$, any state jumps to a random node. It is useful to see how the outcome changes with respect to the results from Question 1. Recall that this output is the \textit{PageRank} vector of the graph represented by $M$.\\Briefly explain (no more than 2 sentences) what you needed to do in order to alter the process in question 1 to apply this taxation.\\
+
+If $M$ is the state transition matrix and $P$ is a matrix with the same shape as $M$ where each element has a value of $\frac{1}{m}$, where $m$ is the number of nodes in the graph, then the matrix $M$ used in \textbf{1.A} can be replaced by the matrix $\beta M + (1-\beta)P$. Following are the values obtained by using the new matrix instead of the one used in \textbf{1.A}.
+
+
+    \begin{table}[!h] 
+    \centering
+    \label{6E}
+    \caption{Value of vector}
+    \begin{tabular}{|c|c|c|c|}
+      \hline
+    Matrix Power & State Propagation & Random Walk & Eigen Analysis  \\
+      \hline        
+      
+$\begin{bmatrix}
+   0.058527\\
+   0.079006\\
+   0.082942\\
+   0.109283\\
+   0.117222\\
+   0.092012\\
+   0.123235\\
+   0.126784\\
+   0.101247\\
+   0.109742\\
+ \end{bmatrix}$
+  &
+  $\begin{bmatrix}
+   0.058527\\
+   0.079006\\
+   0.082942\\
+   0.109283\\
+   0.117222\\
+   0.092012\\
+   0.123235\\
+   0.126784\\
+   0.101247\\
+   0.109742\\
+       \end{bmatrix}$
+  &
+  $\begin{bmatrix}
+   0\\
+   0\\
+   0\\
+   0\\
+   0\\
+   0\\
+   0\\
+   0\\
+   0\\
+   1\\
+     \end{bmatrix}$
+ &	 
+  $\begin{bmatrix}
+  -0.058527\\
+  -0.079006\\
+  -0.082942\\
+  -0.109283\\
+  -0.117222\\
+  -0.092012\\
+  -0.123235\\
+  -0.126784\\
+  -0.101247\\
+  -0.109742\\
+     \end{bmatrix}$\\
+      \hline
+    \end{tabular}
+\end{table}
+
+I am not sure why the Eigen Analysis returned a vector with negative values. In the general case it is possible to have an eigen vector with negative values, but in this case negative values are not valid probabilities. Also the Random Walk method did not give the correct result. I'm not sure why as I did not understand why this method would work.
 
 \end{document}
 
