@@ -22,7 +22,7 @@ Run each method (with $t = 1024$, $q_0 = [1, 0, 0, \ldots, 0]^T$ and $t_0 = 100$
     \begin{table}[!h] 
     \centering
     \label{6A}
-    \caption{Value of vector}
+    \caption{Value of $q*$ vector}
     \begin{tabular}{|c|c|c|c|}
       \hline
     Matrix Power & State Propagation & Random Walk & Eigen Analysis  \\
@@ -85,13 +85,14 @@ $\begin{bmatrix}
 
 \paragraph{B: (10 points):} 
 
-Rerun the \textit{Matrix Power} and \textit{State Propagation} techniques with $q_0 =[0.1,0.1,\ldots,0.1]^T$.For what value of $t$ is required to get as close to the true answer as the older initial state?
+Rerun the \textit{Matrix Power} and \textit{State Propagation} techniques with $q_0 =[0.1,0.1,\ldots,0.1]^T$.
+For what value of $t$ is required to get as close to the true answer as the older initial state?
 
 
     \begin{table}[!h] 
     \centering
     \label{6Bx}
-    \caption{Matrix Power and State Propagation}
+    \caption{Matrix Power}
     \begin{tabular}{|c|c|c|c|}
       \hline
     $t=64$ & $t=128$ & $t=256$ & $t=512$  \\
@@ -152,17 +153,108 @@ $\begin{bmatrix}
     \end{tabular}
 \end{table}
 
-With $t=512$, the value of $q*$ is equal to the value obtained with the older initial state $q_0$ for both Matrix Power and State Propagation. This is expected since raising the matrix to a power is equivalent to multiplying the matrix the same number of times.
+With $t=512$, the value of $q*$ is equal to the value obtained with the older initial state $q_0$ for Matrix Power. The Matrix Power function was implemented using $M^{2i} = M^i \times M^i$ and so it can only be run for powers of $2$. This is shown in table 2.\\
+
+The State Propagation method obtained the value of $q*$ is equal to the value obtained with the older initial state $q_0$ with $t=285$. This is shown in table 3.
+
+    \begin{table}[!h] 
+    \centering
+    \label{6By}
+    \caption{State Propagation}
+    \begin{tabular}{|c|c|c|c|}
+      \hline
+    $t=282$ & $t=283$ & $t=284$ & $t=285$  \\
+      \hline        
+      
+$\begin{bmatrix}
+   0.035757\\
+   0.057212\\
+   0.058092\\
+   0.079217\\
+   0.085818\\
+   0.066014\\
+   0.157905\\
+   0.171636\\
+   0.137309\\
+   0.151040\\
+         \end{bmatrix}$
+  &
+  $\begin{bmatrix}
+   0.035758\\
+   0.057212\\
+   0.058092\\
+   0.079217\\
+   0.085818\\
+   0.066014\\
+   0.157905\\
+   0.171636\\
+   0.137309\\
+   0.151039\\
+    \end{bmatrix}$
+  &
+  $\begin{bmatrix}
+   0.035757\\
+   0.057212\\
+   0.058092\\
+   0.079217\\
+   0.085818\\
+   0.066014\\
+   0.157905\\
+   0.171636\\
+   0.137309\\
+   0.151040\\
+     \end{bmatrix}$
+ &	 
+  $\begin{bmatrix}
+   0.035758\\
+   0.057212\\
+   0.058092\\
+   0.079217\\
+   0.085818\\
+   0.066014\\
+   0.157905\\
+   0.171636\\
+   0.137309\\
+   0.151040\\
+     \end{bmatrix}$\\
+      \hline
+    \end{tabular}
+\end{table}
 
 \paragraph{C: (12 points):} 
 Explain at least one \textbf{Pro} and one \textbf{Con} of each approach. The \textbf{Pro} should explain a situation when it is the best option to use. The \textbf{Con} should explain why another approach may be better for some situation.\\
 
-The Matrix Power and State Propagation approaches are essentially the same. The reason is that $q* = M^tQ_0$ and $q_{i+1} = M \times q_i$ done $t$ times are equivalent since the latter method results in $M$ being raised to the power $t$.\\
+The Matrix Power and State Propagation approaches are mathematically the same. The reason is that $q* = M^tq_0$ and $q_{i+1} = M \times q_i$ done $t$ times are equivalent since the latter method results in $M$ being raised to the power $t$.
 
-I did not understand how the Random Walk method is supposed to work. So I'm leaving this method out from the pros and cons analysis.\\
+\begin{enumerate}
 
-The Eigen Analysis method will give us the exact answer. The reason is that once we get $q*$, if we multiply the transition matrix again by $q*$, we should get $q*$ again. 
+\item \textbf{Matrix Power:} 
 
+\begin{itemize}
+
+\item \textbf{Pros:} This method is easy to implement and works and is the best method for small matrices.
+
+\item \textbf{Cons:} It can be very compute intensive for large matrices. Also, when recursion is used, each recursion level will need to store half the matrix at the previous level. We cannot predict what power the matrix will need to be raised to in order to find the solution. The State Propagation method will be better suited for large matrices.
+
+\end{itemize}
+
+\item \textbf{State Propagation:} 
+
+\begin{itemize}
+
+\item \textbf{Pros:} This will work for large graphs as we only need to do many matrix multiplications of the transition matrix with the state vector. In the case of the world wide web, where this is the best method to use, $50$ to $75$ multiplications reportedly reach a steady steady state. Since the matrix for the world wide web is sparse, the matrix can be efficiently stored. Also the work can be split up by using the MapReduce framework.
+
+\item \textbf{Cons:} We cannot predict how many matrix to state vector multiplications we will need to do in order to find the solution. The Eigen Analysis method will give us the answer in one step.
+
+\end{itemize}
+
+\item \textbf{Random Walk:} I did not understand how the Random Walk method is supposed to work. So I'm leaving this method out from the pros and cons analysis.
+
+\item \textbf{Eigen Analysis:}
+
+\begin{itemize}
+
+\item \textbf{Pros:} The Eigen Analysis method will give us the exact answer and is the best method to use when we need an exact and not an approximate result. Once we get $q*$, if we multiply the transition matrix again by $q*$, we should get $q*$ again. 
 
 \begin{equation*}
 \begin{aligned}
@@ -171,19 +263,19 @@ M \times q* &=  q*\\
 \end{aligned}
 \end{equation*}
 
-where $\lambda$ is some constant that keeps the equality relation true. This means that $q*$ is the principal left eigen vector of $M$.\\
+where $\lambda$ is some constant that keeps the equality relation true. This means that $q*$ is the principal left eigen vector of $M$. 
 
-Even though the Eigen Analysis method will give us the exact answer, it may not always be possible to use it in the case of a graph for the world wide web since the matrix size will be very large.\\
+\item \textbf{Cons:} This method is only suitable for small matrices where it is easy to do the computation. Even though the Eigen Analysis method will give us the exact answer, it may not always be possible to use it in the case of a graph for the world wide web since the matrix size will be very large. For the world wide web, the State Propagation method is best.
 
-The State Propagation approaches will work for large graphs as we only need to do many matrix multiplications of the transition matrix with the initial state vector. In the case of the world wide web, $50$ to $75$ multiplications reportedly reach a steady steady state.\\
+\end{itemize}
 
-The Matrix Power can be very compute intensive for large matrices.
+\end{enumerate}
 
 \paragraph{C: (12 points):} 
 
 Is the Markov chain \textit{ergodic}? Explain why or why not.\\
 
-The Markov chain seems to be ergodic as the state probability vector is converging for values of $t$ shown in table 2 above. If the Markov chain had not been ergodic $M* \neq M^n$ as $n \rightarrow \infty$. \\
+The Markov chain seems to be ergodic as the state probability vector is converging for values of $t$ shown in tables 2 and 3 above. If the Markov chain had not been ergodic $M* \neq M^n$ as $n \rightarrow \infty$. \\
 
 Since the final state vector does not have a zero in any position, it means that there is a probability that a random walker on the graph can end up at any state. This means that the Markov chain is ergodic.
 
@@ -209,9 +301,10 @@ Each matrix row and column represents a node of the graph, label these from $1$ 
 \end{table}
 
 \section{BONUS: Taxation (5 points)}
-Repeat the trials in part \textbf{1.A} above using taxation $\beta = 0.85$ so at each step, with probability $1 - \beta$, any state jumps to a random node. It is useful to see how the outcome changes with respect to the results from Question 1. Recall that this output is the \textit{PageRank} vector of the graph represented by $M$.\\Briefly explain (no more than 2 sentences) what you needed to do in order to alter the process in question 1 to apply this taxation.\\
+Repeat the trials in part \textbf{1.A} above using taxation $\beta = 0.85$ so at each step, with probability $1 - \beta$, any state jumps to a random node. It is useful to see how the outcome changes with respect to the results from Question 1. Recall that this output is the \textit{PageRank} vector of the graph represented by $M$.\\
+Briefly explain (no more than 2 sentences) what you needed to do in order to alter the process in question 1 to apply this taxation.\\
 
-If $M$ is the state transition matrix and $P$ is a matrix with the same shape as $M$ where each element has a value of $\frac{1}{m}$, where $m$ is the number of nodes in the graph, then the matrix $M$ used in \textbf{1.A} can be replaced by the matrix $\beta M + (1-\beta)P$. Following are the values obtained by using the new matrix instead of the one used in \textbf{1.A}.
+If $M$ is the state transition matrix and $P$ is a matrix with the same shape as $M$ where each element has a value of $\frac{1}{m}$, where $m$ is the number of nodes in the graph, then the matrix $M$ used in \textbf{1.A} can be replaced by the matrix $\beta M + (1-\beta)P$. Table 5 shows the values obtained by using the new matrix instead of the one used in \textbf{1.A}.\\
 
 
     \begin{table}[!h] 
@@ -263,22 +356,22 @@ $\begin{bmatrix}
      \end{bmatrix}$
  &	 
   $\begin{bmatrix}
-  -0.058527\\
-  -0.079006\\
-  -0.082942\\
-  -0.109283\\
-  -0.117222\\
-  -0.092012\\
-  -0.123235\\
-  -0.126784\\
-  -0.101247\\
-  -0.109742\\
+  0.058527\\
+  0.079006\\
+  0.082942\\
+  0.109283\\
+  0.117222\\
+  0.092012\\
+  0.123235\\
+  0.126784\\
+  0.101247\\
+  0.109742\\
      \end{bmatrix}$\\
       \hline
     \end{tabular}
 \end{table}
 
-I am not sure why the Eigen Analysis returned a vector with negative values. In the general case it is possible to have an eigen vector with negative values, but in this case negative values are not valid probabilities. Also the Random Walk method did not give the correct result. I'm not sure why as I did not understand why this method would work.
+Eigen Analysis returned a vector with negative values and the vector shown has the negative values  removed. In the general case it is possible to have an eigen vector with negative values, but in this case negative values are not valid probabilities. Also the Random Walk method did not give the correct result. I'm not sure why as I did not understand why this method would work.
 
 \end{document}
 
